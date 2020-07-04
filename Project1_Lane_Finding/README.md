@@ -1,56 +1,76 @@
-# **Finding Lane Lines on the Road** 
-[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
+**Finding Lane Lines on the Road**
 
-<img src="examples/laneLines_thirdPass.jpg" width="480" alt="Combined Image" />
+The goals / steps of this project are the following:
+* Make a pipeline that finds lane lines on the road
+* Reflect on your work in a written report
 
-Overview
+
+[//]: # (Image References)
+
+[image1]: ./processing.jpg 
+[image2]: ./Processed0.jpg 
+
 ---
 
-When we drive, we use our eyes to decide where to go.  The lines on the road that show us where the lanes are act as our constant reference for where to steer the vehicle.  Naturally, one of the first things we would like to do in developing a self-driving car is to automatically detect lane lines using an algorithm.
+### Reflection
 
-In this project you will detect lane lines in images using Python and OpenCV.  OpenCV means "Open-Source Computer Vision", which is a package that has many useful tools for analyzing images.  
+### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
 
-To complete the project, two files will be submitted: a file containing project code and a file containing a brief write up explaining your solution. We have included template files to be used both for the [code](https://github.com/udacity/CarND-LaneLines-P1/blob/master/P1.ipynb) and the [writeup](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md).The code file is called P1.ipynb and the writeup template is writeup_template.md 
+My pipeline consisted of 6 steps (including the final overlay). 
+1. **Conversion to grayscale**
+    In this step the image was converted from the imported RGB format to Grayscale
+2. **Gaussian Blurring**
+    Applied a low pass gaussian filter to eliminate high frequency noise. Used a kernel size of 5 as the feature set of interest to us is pretty large in dimensions. The low pass filtering will have minimal effect on feature extraction.
+3. **Canny Edge Detection**
+    Applied Canny edge detection with *low_threshold* of **100** and a *high_threshold* of **225**
+    These values seemed to work best for the challenge exercise. I wider window seemed better for the first two exercises.
+4. **Polygon Masking**
+    I initially employed a heuristic threshold for the first two exercises. 
+    ```python
+    vertices = np.array([[(100,539),(450, 325), (520, 325), (880,539)]], dtype=np.int32)
+    ```
+    However, this will only work for images of this specific dimension. This proved to be a problem when attempting to solve the optional challenge. Hence, I adopted a more adaptive polygon selection that was dependent on the image shape.
+    ```python
+    vertices = np.array([[(.1*width,.95*height),(.45*width, .6*height), (.55*width, .6*height), (.9*width,.95*height)]], dtype=np.int32)
+    ```
+5. **Line Detection - Using Hough Transforms**
+    Use the following parameter set to detect lines from the edge detected image. 
+    ```python
+    rho = 1
+    theta = np.pi/180 # radians
+    threshold = 10
+    min_line_len = 50
+    max_line_gap =50
+    ```
+    Detection of lines wasn't a big issue but extrapolation of the line required some work. As suggested I used the computed slopes to categorize the detected lines (left and right lane markers). However, there was some miscategorization due to smaller line segments on both sides of the aisle with slopes in the incorrect direction. 
+    
+    *So I decided to divide the image into two halves assuming the camera is mounted in the center of the vehicle and the image in itself is centerd.* 
 
-To meet specifications in the project, take a look at the requirements in the [project rubric](https://review.udacity.com/#!/rubrics/322/view)
+    I looked for lines with a negative slope in the first vertical half of the image to detect the left lane and a similar approach on the second half for the right lane.
+
+    This worked pretty well for the first two exercises but caused issues for the optional challenge. There were almost horizontal lines detected in the image that impacted the line fitting that follows. So I decided to only look at slopes > ~26deg
+
+    After this I used linear fit on the extracted points to extrapolate the line between:
+    ```python
+    ylim = [int(.6*height),int(.95*height)]
+    ```
+    ![Intermediate Processing Results][image1]
+6. **Overlay**
+    This was just a simple overlay on the original RGB image.
+    ![Processed Result][image2]
 
 
-Creating a Great Writeup
----
-For this project, a great writeup should provide a detailed response to the "Reflection" section of the [project rubric](https://review.udacity.com/#!/rubrics/322/view). There are three parts to the reflection:
-
-1. Describe the pipeline
-
-2. Identify any shortcomings
-
-3. Suggest possible improvements
-
-We encourage using images in your writeup to demonstrate how your pipeline works.  
-
-All that said, please be concise!  We're not looking for you to write a book here: just a brief description.
-
-You're not required to use markdown for your writeup.  If you use another method please just submit a pdf of your writeup. Here is a link to a [writeup template file](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md). 
+### 2. Identify potential shortcomings with your current pipeline
 
 
-The Project
----
+There are several potential shortcomings in this pipeline:
+* The current detection alogrithms do not work very well when the image is over exposed. This is observable in the optional challenge where the left lane isn't detected briefly.
+* If the camera or the image was a bit off centered this algorithm crumble owing to the relative segmentation of the image. 
+* The filtering and detection is pretty simplistic, a noisy image in low light will cause a lot of issues.
 
-## If you have already installed the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) you should be good to go!   If not, you should install the starter kit to get started on this project. ##
 
-**Step 1:** Set up the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) if you haven't already.
+### 3. Suggest possible improvements to your pipeline
 
-**Step 2:** Open the code in a Jupyter Notebook
-
-You will complete the project code in a Jupyter notebook.  If you are unfamiliar with Jupyter Notebooks, check out [Udacity's free course on Anaconda and Jupyter Notebooks](https://classroom.udacity.com/courses/ud1111) to get started.
-
-Jupyter is an Ipython notebook where you can run blocks of code and see results interactively.  All the code for this project is contained in a Jupyter notebook. To start Jupyter in your browser, use terminal to navigate to your project directory and then run the following command at the terminal prompt (be sure you've activated your Python 3 carnd-term1 environment as described in the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) installation instructions!):
-
-`> jupyter notebook`
-
-A browser window will appear showing the contents of the current directory.  Click on the file called "P1.ipynb".  Another browser window will appear displaying the notebook.  Follow the instructions in the notebook to complete the project.  
-
-**Step 3:** Complete the project and submit both the Ipython notebook and the project writeup
-
-## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
-
+* Better Filtering
+* Run on low light images
+* Improve the hough transform parameters
