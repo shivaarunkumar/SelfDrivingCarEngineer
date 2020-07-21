@@ -1,7 +1,4 @@
-## Writeup Template
-
-### You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
-
+## Project Writeup 
 ---
 
 **Advanced Lane Finding Project**
@@ -19,109 +16,249 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/undistort_output.png "Undistorted"
-[image2]: ./test_images/test1.jpg "Road Transformed"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
-[video1]: ./project_video.mp4 "Video"
+[image1]: ./output_images/calibration1.jpg_visualize_calibration.png "Calibration"
+[image2]: ./output_images/undistorted_image.png "Undistorted"
+[image3]: ./output_images/filtered_image.png "Filtered"
+[image4]: ./output_images/Hue_Threshold.png "Hue Thresholding"
+[image5]: ./output_images/Color_Threshold.png "Color Thresholding"
+[image6]: ./output_images/Value_Threshold.png "Value Thresholding"
+[image7]: ./output_images/Saturation_Threshold.png "Saturation Thresholding"
+[image8]: ./output_images/Gradient_Threshold.png "Gradient Thresholding"
+[image9]: ./output_images/White_Threshold.png "White Thresholding"
+[image10]: ./output_images/Combined_Threshold.png "Combined Thresholding"
+[image11]: ./output_images/Warped_Image.png "Warped Image"
+[image12]: ./output_images/Unwarped_Binary_Image.png "Unwarped Image"
+[image13]: ./output_images/Fit_Lane.png "Lane Fit"
+[image14]: ./output_images/Final_Output.png "Final Output"
+[image15]: ./output_images/Undistorted_WithSourcePoly.png "Undistorted With Source"
+[image16]: ./output_images/Warped_WithDestinationPoly.png "Warped with Destination"
+[image17]: ./output_images/Unwarped_WithSourcePoly.png "Unwarped with Source"
+[image18]: ./output_images/Fit_WithBadDeviation.png "Fit With Bad Deviation"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
-
-### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
-
 ---
-
-### Writeup / README
-
-#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
-
-You're reading it!
-
 ### Camera Calibration
 
-#### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
+#### Computation and Results
 
-The code for this step is contained in the first code cell of the IPython notebook located in "./examples/example.ipynb" (or in lines # through # of the file called `some_file.py`).  
+**Code :**       ./cameracalibrate.py
+**Images :**     ./output_images/calibration*.png
+**Pickle File:** ./calibration_params.p
 
-I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.  
+The provided chessboard calibration images have **9x6 (54)** calibration corners. 
 
-I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result: 
+Its assumed that the chessboard is fixed on a 2D (x,y) plane. The first step here is to define the _object points_ (`objp`), which are the target or the real world locations for the chessboard corners. (0,0) ... (8,5)
 
-![alt text][image1]
+The next steps is to detect the actual "corners" or _image points_ using `cv2.findChessboardCorners()`
 
-### Pipeline (single images)
+We loop through all of the provided calibration images and concatenate the object points in `objpoints` and image points in `imgpoints` respectivelu.  We then use the final set of values stored in these two arrays to compute the  camera calibration matrix (`mtx`) with the help of the `cv2.calibrateCamera` function.
 
-#### 1. Provide an example of a distortion-corrected image.
+Now I used this matrix to undistort one of the provided calibration images using the `cv2.undistort()` method. As you can see from the result below, I was able to successfully undistort the images:
 
-To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
-![alt text][image2]
+![undistored calibration image][image1]
 
-#### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
+### Lane Detection
 
-![alt text][image3]
+**Python Module Package :** ./ldpackage
 
-#### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
+In order to have a clear separation of code, I have authored the following modules:
 
-The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+1. `ldetect.LaneDetector` : Used to process the input MP4 video and write the output  to a desired MP4 video.
+**Example**
+`ld=LaneDetector('project_video.mp4','processed_project_video.mp4')`
+`ld.process()`
+2.  `ldpackage.process` : This includes all the required processing functions that can potentially be leveraged within the processing pipeline. It also includes the `Line()` class to keep track of lane history.
+
+#### Processing Pipeline
+
+Check the function `process_frame` in **./ldpackage/process.py**
+
+#### 1. Distorion Correction
+
+The `undistort` method in the frame processing module, leverages the previously generated calibration matrix to produce an undistorted image.
+
+![undistorted frame][image2]
+
+#### 2. Filtering
+
+Before performing any further processing, the first step was to filter the image to remove any high frequency noise. For this, I use the standard Gaussian Blur Filtering with a kernel size of **5** as we have small features to worry about.
+
+![filtered frame][image3]
+
+#### 3. Thresholding
+
+After trying the various different type of thresholding , I used the following combination of thresholding:
+
+**Component/Channel Threshold + Gradient Threshold + White Color Threshold**
+
+##### 3.1 Component Threshold
+
+I visualized the various channels R,G,B,H,S,V,L  and finally identified that the following steps yield the best result. It uses a quality parameter called `overexposure`. This is to indicate if we let through too many pixel values.
+
+`overexposure = (number of high pixels in bottom half of image)/(total number of pixels in bottom half)`
+
+The order of precedence is (lines 427-440 in ./ldpackage/process.py):
+Hue &rarr; Red &rarr; Value &rarr; Saturation
+
+Here are typical examples:
+
+![Hue Threshold][image4]
+![Red Threshold][image5]
+![Value Threshold][image6]
+![Saturation Threshold][image7]
+
+##### 3.2 Gradient Threshold
+
+The second thresholding technique leveraged is the gradient threshold to detect the lane boundaries.
+
+![Gradient Threshold][image8]
+
+##### 3.3 White Threshold
+
+Since the dashed lane markings are harder to detect, I wanted to squeeze the benefits of looking for the color white with a high threshold limit.
+
+![White Threshold][image9]
+
+##### 3.4 Combine Threshold
+
+The final thresholded image is 
+
+Component Threshold | Gradient Threshold | White Threshold
+
+![Combined Threshold][image10]
+
+#### 4. Perspective Transform.
+
+
+**Code :** ./perspective.py 
+**Pickle File :** ./pv_pTransformData2.p
+
+In order to compute the _Transformation_ and _Inverse Transformation_ Matrices using `cv2.getPerspectiveTransform()`, I visualized the various frames of the project video (I used the test images as well first but wanted to get one that looked good on the project frames) and the hard coded the following `src` and `dst` points (Note : reversed for inverse transformation)
 
 ```python
-src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
-dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
+src = np.float32([[578,463],[700,463],[1160,719],[240,719]]) # top left, top right, bottom left, bottom right
+dst = np.float32([[400,150],[1000,150],[1000,719],[400,719]]) 
 ```
 
 This resulted in the following source and destination points:
 
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
-| 585, 460      | 320, 0        | 
-| 203, 720      | 320, 720      |
-| 1127, 720     | 960, 720      |
-| 695, 460      | 960, 0        |
+| 578,463       | 400, 150      | 
+| 700,463       | 1000, 150     |
+| 1160, 719     | 1000, 719     |
+| 240, 719      | 400, 719      |
 
-I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
+I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image. Here are the results with the bounding polygons:
 
-![alt text][image4]
 
-#### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
+![Undistorted with Source][image15]
+![Warped with Destination][image16]
+![Unwarped with Source][image17]
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+![Warped Binary Image][image11]
+![Unwarped Binary Image][image12]
 
-![alt text][image5]
+#### 5. Lane Fit
 
-#### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
+**Code File :** ./ldpackage/process.py
+**Functions of Interest :** 
+* `fit_lane(binary_warped, lines = Lines(),ym_per_pix = 30/720, xm_per_pix = 3.7/700)`
+* `find_lane_pixels_fromprev(binary_warped,lines)`
+* `find_lane_pixels(binary_warped)`
 
-I did this in lines # through # in my code in `my_other_file.py`
+The fitting of the lane is very similar to what we did during class with a few slight modifications:
+* To leverage historical results (`Lines()`)
+* To determine quality of fit and take appropriate actions (`View Covariance Matrix`)
+* Addinal hyperparameter to avoid pixels on either edges of the image (`padding`)
 
-#### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
+Let me start with showing the final result of lane fit for the 1st frame we have been looking at:
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+![Fit Lane][image13]
 
-![alt text][image6]
+Now let us a dig a bit deeper into the lane fitting process:
+
+In the absense of apriori information the process is simple:
+* Determine base pixels by using the histogram along X
+* Use the windowing technique to identify lane pixels
+* Use `np.polyfit` to obtain a secord order polynomial fit
+* Generate `left_fitx` and `right_fitx` values using `np.polyval`
+
+##### Quality of Fit
+
+In the code I call `np.polyfit` with the `cov=True` option. I then look at the deviations for the generated `*_fitx` values by computing:
+
+`X.C.Xt`
+
+where `t` indicates transpose, `X` is the generate fit values and `C` is the covariance matrix
+
+I then look at th maximum value of deviation observed and consider it a bad fit if the deviation is more than a hueristic number `15`
+
+**Lines 311-321 in ./ldpackage/process.py**
+```python
+# Quality of Fit
+left_fitx = np.polyval(left_fit,ploty)
+right_fitx = np.polyval(right_fit,ploty)
+n = 2 #Degree of fit
+TT = np.vstack([ploty**(n-i) for i in range(n+1)]).T     
+C_left_fitx = np.dot(TT, np.dot(lcov, TT.T)) # C_y = TT*cov*TT.T
+sig_left_fitx = np.sqrt(np.diag(C_left_fitx))    
+C_right_fitx = np.dot(TT, np.dot(rcov, TT.T)) # C_y = TT*cov*TT.T
+sig_right_fitx = np.sqrt(np.diag(C_right_fitx))
+lfit_good = True if np.max(sig_left_fitx)<15 else False
+rfit_good = True if np.max(sig_right_fitx)<15 else False
+```
+
+Here is an example of a bad fit (the magenta indicates the amount of deviation in the predicted X values):
+
+![Bad Deviation][image18]
+
+##### History
+**Class :** `Lines()`
+
+* I use the information in the last 50 frames to predict the lane in the absence of a good fit. 
+* If a good fit was obtained in the previous run then I look for lane pixel around the previous fit instead of using the histogram based approach.
+
+#### 6. Curvature Computation
+
+**File :** ./ldpackage/process.py
+**Function :** `fit_lane`
+
+The left and right curvatures were computed as we did in class.
+* Choose the base value of `y=719` as the point where we will be computing the curvature. (Line : 299)
+* Assume the pixel to meters conversion to be the same as what we used in the class. We are still dealing with US lanes and highways. `ym_per_pix = 30/720, xm_per_pix = 3.7/700`
+* Compute real world fits after converting lane pixels to real world values. [`left_fit_cr`,`right_fit_cr`]  _Lines_ : 304 and 307
+* Curvature is computed using the formula discussed during the course. [`left_curverad` and `right_curverad`] _Lines_ 305 and 308
+* Now the final curvature value is typically the average of both the left and right curvature values , if both fits are good. If not it is the one associated with the good fit. If neither of the fits are good, then we use the one that was previously computer.
+
+#### 7. Lane Deviation
+
+_File_ ./ldpackage/process.py
+_Function_  `fit_lane`
+_Lines_ 326-332
+
+Using the real world fits from the previous step, I computer the lane ends `left_limit` and `right_limit` using `np.polyval`. I then computer the center of this as `lane_center`, now the displacement of the car from the lane center `disp` was computed as the difference between the lane center and the image center in real world values. 
+
+
+The final result of the process pipeline is as follows:
+
+
+![Final Result][image14]
 
 ---
 
 ### Pipeline (video)
 
-#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
-
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](./processed_project_video.mp4)
 
 ---
 
 ### Discussion
 
-#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+#### Potential Improvement 
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+* Currently I do not filter the current fit with the history of previous fits if I deem it good. This can lead to Jitter. 
+* For the harder challenge video , I think I should use a higher order fit rather than a second order fit. 
+* The thresholds are currently very permissive and this will lead to a lot of noise for the other challenge videos.
+* The quality criteria for the two fits needs to be better. Intersection between the lanes within the image frame should be detected and flagged as an incorrect fit.
