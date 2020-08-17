@@ -172,3 +172,19 @@ def addLeNet(model):
 ```
 
 #### 3. Visualizing Results
+
+visualize.py was used to review the convolution results for an example image as shown:
+
+![image5]
+![image6]
+![image7]
+![image8]
+![image9]
+
+#### 4. Output Video
+
+[video](https://github.com/shivaarunkumar/SelfDrivingCarEngineer/blob/master/CarND-Behavioral-Cloning-P3/video.mp4)
+
+### Issues Faced
+
+* Often ran out of VRAM on my machine resuling in ***Error in CuDNN: CUDNN_STATUS_ALLOC_FAILED***
