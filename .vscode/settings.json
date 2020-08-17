@@ -1,5 +1,6 @@
 {
 
-    "python.pythonPath": "C:\\Users\\Admin\\.conda\\envs\\tf-gpu-v1\\python.exe"
+    "python.pythonPath": "C:\\Users\\Admin\\.conda\\envs\\tf-gpu-v1\\python.exe",
+    "git.ignoreLimitWarning": true
 
 }
