@@ -3,3 +3,5 @@
 /Lesson24/Section13/EKF/.vs/
 /Lesson24/Section13/EKF/Debug/
 /Lesson24/Section13/EKF/x64/
+cmake-build-debug
+cmake-build-debug-coverage
