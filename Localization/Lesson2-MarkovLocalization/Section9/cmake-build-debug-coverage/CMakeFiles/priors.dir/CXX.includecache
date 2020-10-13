@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/e/Courses/Udacity/Workbooks/ND013/SelfDrivingCarEngineer/Localization/Lesson2-MarkovLocalization/Section9/main.cpp
+iostream
+-
+vector
+-
+

@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/jacobian.dir/main.cpp.o  -o ../../../Lesson24/Section19/jacobian 

@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/rmse.dir/main.cpp.o  -o ../../../Lesson24/Section23/rmse 

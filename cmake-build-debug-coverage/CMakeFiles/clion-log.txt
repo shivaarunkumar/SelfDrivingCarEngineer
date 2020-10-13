@@ -1,0 +1,4 @@
+/usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS=--coverage -DCMAKE_C_FLAGS=--coverage -G "CodeBlocks - Unix Makefiles" /mnt/e/Courses/Udacity/Workbooks/ND013/SelfDrivingCarEngineer
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /mnt/e/Courses/Udacity/Workbooks/ND013/SelfDrivingCarEngineer/cmake-build-debug-coverage

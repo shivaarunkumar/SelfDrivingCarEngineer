@@ -1,6 +1,7 @@
 {
 
     "python.pythonPath": "C:\\Users\\Admin\\.conda\\envs\\tf-gpu-v1\\python.exe",
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
 
 }

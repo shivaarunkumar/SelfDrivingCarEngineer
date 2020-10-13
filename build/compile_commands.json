@@ -1,0 +1,17 @@
+[
+{
+  "directory": "D:/Courses/Udacity/Workbooks/ND013/SelfDrivingCarEngineer/build/Lesson24/Section13",
+  "command": "D:\\mingw\\bin\\g++.exe    -g   -o CMakeFiles\\eigen.dir\\kalman_filter.cpp.obj -c D:\\Courses\\Udacity\\Workbooks\\ND013\\SelfDrivingCarEngineer\\Lesson24\\Section13\\kalman_filter.cpp",
+  "file": "D:/Courses/Udacity/Workbooks/ND013/SelfDrivingCarEngineer/Lesson24/Section13/kalman_filter.cpp"
+},
+{
+  "directory": "D:/Courses/Udacity/Workbooks/ND013/SelfDrivingCarEngineer/build/Lesson24/Section13",
+  "command": "D:\\mingw\\bin\\g++.exe    -g   -o CMakeFiles\\eigen.dir\\tracking.cpp.obj -c D:\\Courses\\Udacity\\Workbooks\\ND013\\SelfDrivingCarEngineer\\Lesson24\\Section13\\tracking.cpp",
+  "file": "D:/Courses/Udacity/Workbooks/ND013/SelfDrivingCarEngineer/Lesson24/Section13/tracking.cpp"
+},
+{
+  "directory": "D:/Courses/Udacity/Workbooks/ND013/SelfDrivingCarEngineer/build/Lesson24/Section13",
+  "command": "D:\\mingw\\bin\\g++.exe    -g   -o CMakeFiles\\eigen.dir\\main.cpp.obj -c D:\\Courses\\Udacity\\Workbooks\\ND013\\SelfDrivingCarEngineer\\Lesson24\\Section13\\main.cpp",
+  "file": "D:/Courses/Udacity/Workbooks/ND013/SelfDrivingCarEngineer/Lesson24/Section13/main.cpp"
+}
+]
