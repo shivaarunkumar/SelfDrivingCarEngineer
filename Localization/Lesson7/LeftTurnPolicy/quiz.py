@@ -12,11 +12,12 @@
 # Increasing the index in this array corresponds to making a
 # a left turn, and decreasing the index corresponds to making a
 # right turn.
+from numpy import array
 
-forward = [[-1,  0], # go up
-           [ 0, -1], # go left
-           [ 1,  0], # go down
-           [ 0,  1]] # go right
+forward = [[-1, 0],  # go up
+           [0, -1],  # go left
+           [1, 0],  # go down
+           [0, 1]]  # go right
 forward_name = ['up', 'left', 'down', 'right']
 
 # action has 3 values: right turn, no turn, left turn
@@ -33,15 +34,17 @@ grid = [[1, 1, 1, 0, 0, 0],
         [1, 1, 1, 0, 1, 1],
         [1, 1, 1, 0, 1, 1]]
 
-init = [4, 3, 0] # given in the form [row,col,direction]
+init = [4, 3, 0]  # given in the form [row,col,direction]
 # direction = 0: up
 #             1: left
 #             2: down
 #             3: right
 
-goal = [2, 0] # given in the form [row,col]
+goal = [2, 0]  # given in the form [row,col]
 
-cost = [2, 1, 20] # cost has 3 values, corresponding to making
+cost = [2, 1, 20]  # cost has 3 values, corresponding to making
+
+
 # a right turn, no turn, and a left turn
 
 # EXAMPLE OUTPUT:
@@ -57,6 +60,63 @@ cost = [2, 1, 20] # cost has 3 values, corresponding to making
 # modify code below
 # ----------------------------------------
 
-def optimum_policy2D(grid,init,goal,cost):
+def optimum_policy2D(grid, init, goal, cost):
+    value = [[[999 for i in range(len(row))] for row in grid] for i in range(len(forward))]
+    policy3D = [[[' ' for i in range(len(row))] for row in grid] for i in range(len(forward))]
+    policy2D = [[' ' for i in range(len(row))] for row in grid]
+
+
+    change = True
+
+    while change:
+        change = False
+        for x in range(len(grid)):
+            for y in range(len(grid[0])):
+                for orientation in range(len(forward_name)):
+                    if goal[0] == x and goal[1] == y:
+                        if value[orientation][x][y] > 0:
+                            value[orientation][x][y] = 0  # Nothing to be done and there is no cost
+                            policy3D[orientation][x][y] = '*'  # Mark the target
+                            change = True
+                    elif grid[x][y] == 0:  # Unblocked
+                        # There are three possible movements
+                        # Move forward, Turn Right and Move Forward and Turn Left and Move forward
+                        for i in range(len(action)):
+                            # Update new state
+                            o2 = (orientation + action[i]) % 4
+                            x2 = x + forward[o2][0]
+                            y2 = y + forward[o2][1]
+
+                            if 0 <= x2 < len(grid) \
+                                    and 0 <= y2 < len(grid[0]) \
+                                    and grid[x2][y2] == 0:
+                                v2 = value[o2][x2][y2] + cost[i]
+
+                                if v2 < value[orientation][x][y]:
+                                    change = True
+                                    value[orientation][x][y] = v2
+                                    policy3D[orientation][x][y] = action_name[i]
+
+    x = init[0]
+    y = init[1]
+    orientation = init[2]
+
+    policy2D[x][y] = policy3D[orientation][x][y]
+    while policy3D[orientation][x][y] != '*':
+        if policy3D[orientation][x][y] == '#':
+            o2 = orientation
+        elif policy3D[orientation][x][y] == 'R':
+            o2 = (orientation - 1) % 4
+        elif policy3D[orientation][x][y] == 'L':
+            o2 = (orientation + 1) % 4
+        x = x + forward[o2][0]
+        y = y + forward[o2][1]
+        orientation = o2
+        policy2D[x][y] = policy3D[orientation][x][y]
 
     return policy2D
+
+
+policy = optimum_policy2D(grid, init, goal, cost)
+for row in policy:
+    print(row)
