@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.16)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+project(naive_bayes)
+add_executable(naive_bayes main.cpp classifier.cpp)
+target_include_directories(naive_bayes PUBLIC "./")

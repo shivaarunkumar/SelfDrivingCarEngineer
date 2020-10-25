@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$/CarND-Kidnapped-Vehicle-Project">
+  <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$/Localization/Lesson8-Prediction/NaiveBayes">
     <contentRoot DIR="$PROJECT_DIR$" />
   </component>
 </project>
