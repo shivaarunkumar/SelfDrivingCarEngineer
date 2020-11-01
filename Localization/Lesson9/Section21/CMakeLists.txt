@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.16)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+project(behavior_planner)
+add_executable(behavior_planner main.cpp cost.cpp road.cpp vehicle.cpp)
