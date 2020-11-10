@@ -174,12 +174,12 @@ int main() {
                             car_ahead = true;
                             too_close = true;
                             if(prev_close){
-                                close_count+=.5;
+                                close_count+=.1;
                             }
                         }
-                        else if (((lane - other_car_lane)==1) && (other_car_s > (car_s-50.0)) && (other_car_s < (car_s+50.0)))
+                        else if (((lane - other_car_lane)==1) && (other_car_s > (car_s-30.0)) && (other_car_s < (car_s+30.0)))
                             car_left = true;
-                        else if (((lane - other_car_lane)==-1) && (other_car_s > (car_s-50.0)) && (other_car_s < (car_s+50.0)))
+                        else if (((lane - other_car_lane)==-1) && (other_car_s > (car_s-30.0)) && (other_car_s < (car_s+30.0)))
                             car_right = true;
 
                     }
@@ -188,9 +188,9 @@ int main() {
 
                     // Look for possibility of lane change
                     if(car_ahead){
-                        if((lane>0) && !car_left && (target_velocity > 30.0) && (target_velocity <= 35.0))
+                        if((lane>0) && !car_left && (target_velocity > 30.0) && (target_velocity <= 40.0))
                             lane--;
-                        else if((lane<2) && !car_right && (target_velocity > 30.0) && (target_velocity <= 35.0))
+                        else if((lane<2) && !car_right && (target_velocity > 30.0) && (target_velocity <= 40.0))
                             lane++;
                         else{
                             // Decrement velocity
