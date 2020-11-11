@@ -1,13 +1,7 @@
 # CarND-Path-Planning-Project
 Self-Driving Car Engineer Nanodegree Program
 
-[//]: # (Image References)
 
-[image1]: ./images/activitydiagram.png "Activity diagram"
-[image2]: ./images/flowcart.png "Flowchart"
-[image3]: ./images/changeintolane.png "changeinto"
-[image4]: ./images/lanechange.png "lc"
-[image5]: ./images/final.png "result"
 
 ### Objective
 
@@ -25,11 +19,11 @@ The goal of this project to is to path plan for a car to safely navigate around 
 
 #### Activity diagram
 At a very high level the different modules communicated as shown in the following activity diagram:
-![ad] [image1]   
+![ad](./images/activitydiagram.png)   
 
 The basic logic is as described in the following flow chart:  
 
-![fc] [image2]
+![fc](./images/flowcart.png)
 
 ### Challenges and Approach
 
@@ -60,7 +54,7 @@ Lane change is performed only when :
 
 I have chosen to generate a 50 point trajectory.
 I retain a maximum of 10 points from the previous time step's trajectory. This is to mitigate jerk and at the same time be able to react to quick changes in the driving scenario. Like a neighboring car , changing its lane into the ego vehicles lane.
-![cl] [image3]
+![cl](./images/changeintolane.png)
  
 In order to generate additional way points, we leverage the spline library. 
 We first create a spline (as showd in the QA section) from the last couple of points in the previous trajectory to about 90 meters ahead.
@@ -74,11 +68,11 @@ I have created two convenience functions in helper.c : ```getCarXY and getMapXY`
 ##### 5. Results
 **Lane Change**
 
-![lc] [image4]
+![lc](./images/lanechange.png)
 
 **Final Result**
 
-![result] [image5]
+![result](./images/final.png)
 
 
 ### Future Actions
