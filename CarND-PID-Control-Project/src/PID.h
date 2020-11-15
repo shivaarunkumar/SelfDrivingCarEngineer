@@ -31,6 +31,12 @@ class PID {
    */
   double TotalError();
 
+
+  /**
+   * Optimize constrol parameters using Twiddle
+   */
+  void DisplayParams();
+
  private:
   /**
    * PID Errors
