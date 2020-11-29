@@ -1,0 +1,37 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="JupyterKernelInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="14">
+            <item index="0" class="java.lang.String" itemvalue="scipy" />
+            <item index="1" class="java.lang.String" itemvalue="wsaccel" />
+            <item index="2" class="java.lang.String" itemvalue="h5py" />
+            <item index="3" class="java.lang.String" itemvalue="setuptools" />
+            <item index="4" class="java.lang.String" itemvalue="attrdict" />
+            <item index="5" class="java.lang.String" itemvalue="numpy" />
+            <item index="6" class="java.lang.String" itemvalue="gevent-websocket" />
+            <item index="7" class="java.lang.String" itemvalue="python-socketio" />
+            <item index="8" class="java.lang.String" itemvalue="tensorflow" />
+            <item index="9" class="java.lang.String" itemvalue="markdown" />
+            <item index="10" class="java.lang.String" itemvalue="keras" />
+            <item index="11" class="java.lang.String" itemvalue="gevent" />
+            <item index="12" class="java.lang.String" itemvalue="Pillow" />
+            <item index="13" class="java.lang.String" itemvalue="ujson" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="catkin_ws.src.simple_arm.scripts.arm_mover.simple_arm" />
+          <option value="catkin_ws.src.simple_arm.scripts.arm_mover.*" />
+          <option value="catkin_ws.src.simple_arm.scripts.look_away.*" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

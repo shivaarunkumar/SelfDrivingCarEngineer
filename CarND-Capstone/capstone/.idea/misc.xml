@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$/ros/src">
+    <contentRoot DIR="$PROJECT_DIR$" />
+  </component>
+  <component name="CidrRootsConfiguration">
+    <sourceRoots>
+      <file path="$PROJECT_DIR$/ros/devel/lib/python2.7/dist-packages" />
+    </sourceRoots>
+  </component>
+</project>

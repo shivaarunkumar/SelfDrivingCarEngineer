@@ -5,3 +5,5 @@
 /Lesson24/Section13/EKF/x64/
 cmake-build-debug
 cmake-build-debug-coverage
+/CarND-Capstone/capstone/venv/
+/TrafficLightClassification/data/**
